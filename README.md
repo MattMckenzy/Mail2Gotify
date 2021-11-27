@@ -60,6 +60,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     restart: always
+    ports:
+      - "587:587"
     
 networks:
   default:
