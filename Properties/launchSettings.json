@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "Mail2Gotify": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "DockerfileRunArguments": "-p 587:587 -v \"C:\\Working Folder\\app\\cache:/app/cache\""
+    }
+  }
+}
