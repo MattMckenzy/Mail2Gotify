@@ -52,7 +52,7 @@ services:
       - Services:Mail2Gotify:HostAddress=localhost
       - Services:Mail2Gotify:CacheDirectory=/app/cache
       - Services:Gotify:ServiceUri=https://your-gotify-instance
-      - Services:Gotify:ServiceUri=https://your-gotify-instance
+      - Certificate:Password=randompassword
       - TZ=America/Toronto
     image: mattmckenzy/mail2gotify:latest      
     volumes:
