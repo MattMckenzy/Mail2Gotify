@@ -5,7 +5,7 @@ Simple stand-alone service that hosts an STMP server, receives mail and redirect
 
 ## Description
 
-This application will let you redirect mail to your gotify instance. It can help to aggregate notifications from services or systems that don't support Gotify.
+This application will let you redirect mail to your gotify instance. It can help aggregate notifications from services or systems that don't support Gotify.
 
 
 ## Usage
