@@ -27,6 +27,7 @@ namespace Mail2Gotify
                         .AddSingleton<GotifyMessageStore>()
                         .AddSingleton<GotifyUserAuthenticator>()
                         .AddSingleton<FileSystemCaching>()
+                        .AddSingleton<CacheItemProcessingService>()
                         .AddHttpClient<StaticTokenCaller<GotifyServiceAppProvider>>()
                             .SetHandlerLifetime(TimeSpan.FromMinutes(5))  //Set lifetime to five minutes
                             .AddPolicyHandler(GetRetryPolicy()); ;

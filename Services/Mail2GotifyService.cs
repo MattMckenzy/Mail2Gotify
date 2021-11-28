@@ -1,13 +1,9 @@
-﻿using Mail2Gotify.Exceptions;
-using Mail2Gotify.Models;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SmtpServer;
 using SmtpServer.ComponentModel;
 using System;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
@@ -17,36 +13,26 @@ namespace Mail2Gotify.Services
 {
     public class Mail2GotifyService : IHostedService
     {
+        private readonly CacheItemProcessingService _cacheItemProcessingService;
         private readonly GotifyMessageStore _gotifyMessageStore;
         private readonly GotifyUserAuthenticator _gotifyUserAuthenticator;
-        private readonly FileSystemCaching _fileSystemCaching;
-        private readonly GotifyService _gotifyService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<Mail2GotifyService> _logger;
 
         private SmtpServer.SmtpServer _smtpServer;
 
-        private FileSystemWatcher _fileSystemWatcher;
-
-        public Mail2GotifyService(GotifyMessageStore gotifyMessageStore, GotifyUserAuthenticator gotifyUserAuthenticator, FileSystemCaching fileSystemCaching, GotifyService gotifyService, IConfiguration configuration, ILogger<Mail2GotifyService> logger)
+        public Mail2GotifyService(CacheItemProcessingService cacheItemProcessingService, GotifyMessageStore gotifyMessageStore, GotifyUserAuthenticator gotifyUserAuthenticator, IConfiguration configuration, ILogger<Mail2GotifyService> logger)
         {
+            _cacheItemProcessingService = cacheItemProcessingService;
             _gotifyMessageStore = gotifyMessageStore;
             _gotifyUserAuthenticator = gotifyUserAuthenticator;
-            _fileSystemCaching = fileSystemCaching;
-            _gotifyService = gotifyService;
             _configuration = configuration;
             _logger = logger;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            _fileSystemWatcher = new(_fileSystemCaching.CacheDirectory.FullName, "*.cache");
-            _fileSystemWatcher.Created += async (object _, FileSystemEventArgs eventArgs) =>
-                await ProcessCacheItems();
-
-            _fileSystemWatcher.EnableRaisingEvents = true;
-
-            await ProcessCacheItems();
+            await _cacheItemProcessingService.ProcessCacheItems();
 
             ISmtpServerOptions options = new SmtpServerOptionsBuilder()
               .ServerName(_configuration["Services:Mail2Gotify:HostAddress"])
@@ -73,8 +59,6 @@ namespace Mail2Gotify.Services
         {
             _logger.Log(LogLevel.Information, $"Mail2Gotify server stopping!");
 
-            _fileSystemWatcher.Dispose();
-
             #pragma warning disable CA2016 // We don't want to cancel waiting, server will receive SIGKILL if taking too long.
             Task.WaitAll(_smtpServer.ShutdownTask);
             #pragma warning restore CA2016 // We don't want to cancel waiting, server will receive SIGKILL if taking too long.
@@ -89,26 +73,6 @@ namespace Mail2Gotify.Services
             X509Certificate certificate = certificateRequest.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(1));
 
             return new X509Certificate2(certificate.Export(X509ContentType.Pfx, _configuration["Certificate:Password"]), _configuration["Certificate:Password"]);
-        }
-
-        private async Task ProcessCacheItems()
-        {
-            foreach (FileInfo fileInfo in _fileSystemCaching.CacheDirectory.GetFiles("*.cache").ToArray())
-            {
-                if (fileInfo != null && fileInfo.Exists)
-                {
-                    try
-                    {
-                        CacheItem cacheItem = await _fileSystemCaching.GetAsync(Path.GetFileNameWithoutExtension(fileInfo.Name));
-                        await _gotifyService.PushMessage(cacheItem.GotifyMessage, cacheItem.Credential);
-                        await _fileSystemCaching.RemoveAsync(cacheItem.Key);
-                    }
-                    catch (CommunicationException communicationException)
-                    {
-                        _logger.Log(LogLevel.Error, $"Could not communicate with Gotify: {communicationException}");
-                    }
-                }
-            }
         }
     }
 }

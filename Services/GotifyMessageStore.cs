@@ -1,6 +1,4 @@
-﻿using Mail2Gotify.Exceptions;
-using Mail2Gotify.Models;
-using Microsoft.Extensions.Logging;
+﻿using Mail2Gotify.Models;
 using MimeKit;
 using SmtpServer;
 using SmtpServer.Protocol;
@@ -17,10 +15,12 @@ namespace Mail2Gotify.Services
     public class GotifyMessageStore : MessageStore
     {
         private readonly FileSystemCaching _fileSystemCaching;
+        private readonly CacheItemProcessingService _cacheItemProcessingService;
 
-        public GotifyMessageStore(FileSystemCaching fileSystemCaching)
+        public GotifyMessageStore(FileSystemCaching fileSystemCaching, CacheItemProcessingService cacheItemProcessingService)
         {
             _fileSystemCaching = fileSystemCaching;
+            _cacheItemProcessingService = cacheItemProcessingService;
         }
 
         public override async Task<SmtpResponse> SaveAsync(ISessionContext context, IMessageTransaction transaction, ReadOnlySequence<byte> buffer, CancellationToken cancellationToken)
@@ -54,6 +54,8 @@ namespace Mail2Gotify.Services
                         },
                     Credential = (string)credential
                 }, cancellationToken);
+
+                _ = Task.Run(_cacheItemProcessingService.ProcessCacheItems, cancellationToken);
 
                 return SmtpResponse.Ok;
             }

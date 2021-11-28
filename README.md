@@ -62,11 +62,7 @@ services:
     restart: always
     ports:
       - "587:587"
-    
-networks:
-  default:
-    external:
-      name: internal
+    network_mode: "host"
 ```
 
 # Donate
