@@ -5,7 +5,7 @@ Simple stand-alone service that hosts an STMP server, receives mail and redirect
 
 ## Description
 
-This application will let you redirect mail to your gotify instance. It can help to aggregate notifications from services or systems that don't support Gotify.
+This application will let you redirect mail to your gotify instance. It can help aggregate notifications from services or systems that don't support Gotify.
 
 
 ## Usage
@@ -24,7 +24,7 @@ Logging:LogLevel:Microsoft | Warning | Default .NET Microsoft logging level.
 Logging:LogLevel:Microsoft.Hosting.Lifetime | Information |  Default .NET Microsoft Hosting logging level.
 Services:Mail2Gotify:HostAddress | | The address on which this service resides.
 Services:Mail2Gotify:HostPort | 587 | The port that this service will use to receive mail through SMTP.
-Services:Mail2Gotify:CacheDirectory | | The directory to use for persistant caaching (bind with docker for permanency).
+Services:Mail2Gotify:CacheDirectory | | The directory to use for persistent caaching (bind with docker for permanency).
 Services:Gotify:ServiceUri | | Gotify's service uri.
 Services:Gotify:Header | X-Gotify-Key | Gotify's authentication header to use (the default is typically correct).
 Services:Certificate:Name | Mail2Gotify | The name of the X502 certificate used for the SMTP server's TLS encryption (TLS 1.1 or 1.2 is mandatory).
