@@ -24,7 +24,7 @@ namespace Mail2Gotify.Services
             FileInfo cacheFile = CacheDirectory.GetFiles(KeyParse(key)).FirstOrDefault();
 
             if (cacheFile != null && cacheFile.Exists)
-                return JsonConvert.DeserializeObject<CacheItem>(File.ReadAllText(cacheFile.FullName));
+                return JsonConvert.DeserializeObject<CacheItem>(File.ReadAllText(cacheFile.FullName), new JsonSerializerSettings { CheckAdditionalContent = false });
             else
                 throw new ArgumentException($"The key: ({key}) was not found in the cache repository.");
         }
@@ -34,7 +34,7 @@ namespace Mail2Gotify.Services
             FileInfo cacheFile = CacheDirectory.GetFiles($"{KeyParse(key)}.cache").FirstOrDefault();
 
             if (cacheFile != null && cacheFile.Exists)
-                return JsonConvert.DeserializeObject<CacheItem>(await File.ReadAllTextAsync(cacheFile.FullName, token));
+                return JsonConvert.DeserializeObject<CacheItem>(await File.ReadAllTextAsync(cacheFile.FullName, token), new JsonSerializerSettings { CheckAdditionalContent = false });
             else
                 throw new ArgumentException($"The key: ({key}) was not found in the cache repository.");
         }

@@ -49,7 +49,7 @@ namespace Mail2Gotify.Services
                         {
                             Date = messageDateTime,
                             Priority = int.TryParse(context.Authentication.User.Split("-").Last(), out int priority) ? priority : 5,
-                            Title = message.Subject,
+                            Title = $"{message.Subject} ({message.To})",
                             Message = message.TextBody
                         },
                     Credential = (string)credential
