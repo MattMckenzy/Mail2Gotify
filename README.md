@@ -11,7 +11,11 @@ This application will let you redirect mail to your gotify instance. It can help
 ## Usage
 
 
-Simply fill up the necessary configuration variables, host the service and expose the configured port. Create a Gotify Application if necessary and point your email notifier to the host and port, using the Gotify App name as the authentication user and the Gotify App token as the authentication password.
+Simply fill up the necessary configuration variables, host the service and expose the configured port. 
+
+TLS1.1 or 1.2 is mandatory and Mail2Gotify will need an X502 certificate to function. You can choose to point the "CertLocation" variable to a valid certificate, provided by Let's Encrypt for example, or leave it empty to have Mail2Gotify cerate a self-signed one. Keep in mind, however, that self-signed certificates might not be accepted by certain applications, such as pfSense's notifications service. 
+
+Create a Gotify Application if necessary and point your email notifier to the host and port, using the Gotify App name as the authentication user and the Gotify App token as the authentication password.
 
 ## <a id="configuration-1">Configuration</a>
 
@@ -22,13 +26,14 @@ Variable | Default | Description|
 Logging:LogLevel:Default | Debug | Default .NET logging level.
 Logging:LogLevel:Microsoft | Warning | Default .NET Microsoft logging level.
 Logging:LogLevel:Microsoft.Hosting.Lifetime | Information |  Default .NET Microsoft Hosting logging level.
+Services:Gotify:ServiceUri | | Gotify's service uri.
+Services:Gotify:Header | X-Gotify-Key | Gotify's authentication header to use (the default is typically correct).
 Services:Mail2Gotify:HostAddress | | The address on which this service resides.
 Services:Mail2Gotify:HostPort | 587 | The port that this service will use to receive mail through SMTP.
 Services:Mail2Gotify:CacheDirectory | | The directory to use for persistent caaching (bind with docker for permanency).
-Services:Gotify:ServiceUri | | Gotify's service uri.
-Services:Gotify:Header | X-Gotify-Key | Gotify's authentication header to use (the default is typically correct).
-Services:Certificate:Name | Mail2Gotify | The name of the X502 certificate used for the SMTP server's TLS encryption (TLS 1.1 or 1.2 is mandatory).
-Services:Certificate:Password |  | The password used for the X502 certificate.
+Services:Mail2Gotify:CertLocation | | The location for the X502 certificate used for TLS encryption. If left empty, Mail2Gotify will create a self-signed certificate with the variables below.
+Services:Certificate:Name | Mail2Gotify | The name used for the creation of the X502 certificate used for the SMTP server's TLS encryption.
+Services:Certificate:Password |  | The password used for the creation of the X502 certificate.
 
 
 # Docker

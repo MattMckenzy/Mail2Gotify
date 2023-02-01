@@ -34,6 +34,9 @@ namespace Mail2Gotify.Services
         {
             await _cacheItemProcessingService.ProcessCacheItems();
 
+            X509Certificate x509Certificate = string.IsNullOrWhiteSpace(_configuration["Services:Mail2Gotify:CertLocation"]) ? CreateX509Certificate2() : 
+                new X509Certificate(_configuration["Services:Mail2Gotify:CertLocation"]);
+
             ISmtpServerOptions options = new SmtpServerOptionsBuilder()
               .ServerName(_configuration["Services:Mail2Gotify:HostAddress"])
               .Endpoint(builder =>
@@ -42,7 +45,7 @@ namespace Mail2Gotify.Services
                 .IsSecure(true)
                 .AuthenticationRequired()
                 .SupportedSslProtocols(System.Security.Authentication.SslProtocols.Tls11 | System.Security.Authentication.SslProtocols.Tls12)
-                .Certificate(CreateX509Certificate2()))
+                .Certificate(x509Certificate))
               .Build();
 
             ServiceProvider serviceProvider = new();

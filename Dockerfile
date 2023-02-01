@@ -1,10 +1,10 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/runtime:5.0 AS base
+FROM mcr.microsoft.com/dotnet/runtime AS base
 WORKDIR /app
 EXPOSE 587
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk AS build
 WORKDIR /src
 COPY ["Mail2Gotify.csproj", "."]
 RUN dotnet restore "./Mail2Gotify.csproj"
