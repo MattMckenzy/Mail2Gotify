@@ -13,9 +13,9 @@ This application will let you redirect mail to your gotify instance. It can help
 
 Simply fill up the necessary configuration variables, host the service and expose the configured port. 
 
-TLS1.1 or 1.2 is mandatory and Mail2Gotify will need an X502 certificate to function. You can choose to point the "CertLocation" variable to a valid certificate, provided by Let's Encrypt for example, or leave it empty to have Mail2Gotify cerate a self-signed one. Keep in mind, however, that self-signed certificates might not be accepted by certain applications, such as pfSense's notifications service. 
+TLS1.1 or 1.2 is mandatory and Mail2Gotify will need an X502 certificate to function. You can choose to point the "CertLocation" variable to a valid *.pfx certificate, provided by Let's Encrypt for example, or leave it empty to have Mail2Gotify cerate a self-signed one. Keep in mind, however, that self-signed certificates might not be accepted by certain applications, such as pfSense's notifications service. 
 
-Create a Gotify Application if necessary and point your email notifier to the host and port, using the Gotify App name as the authentication user and the Gotify App token as the authentication password.
+Create a Gotify Application if necessary and point your email notifier to the host and port, using the Gotify App name as the authentication user and the Gotify App token as the authentication password. You can also append a dash and priority number to the application name, i.e. "pfSense-6", to change the priority level of the Gotify notification. Default priority is 5.
 
 ## <a id="configuration-1">Configuration</a>
 
@@ -56,14 +56,15 @@ services:
     environment:
       - Services:Mail2Gotify:HostAddress=localhost
       - Services:Mail2Gotify:CacheDirectory=/app/cache
-      - Services:Gotify:ServiceUri=https://your-gotify-instance
-      - Certificate:Password=randompassword
+      - Services:Mail2Gotify:CertLocation=/app/certs/privkey.pfx      
+      - Services:Gotify:ServiceUri=https://gotify.exampledomain.ca
       - TZ=America/Toronto
     image: mattmckenzy/mail2gotify:latest      
     volumes:
       - cache:/app/cache
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+      - /mnt/docker/storage/volumes/swag_data/_data/etc/letsencrypt/live/exampledomain.ca:/app/certs
     restart: always
     ports:
       - "587:587"
