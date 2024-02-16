@@ -76,6 +76,6 @@ services:
 
 ## Release Notes
 
-## 1.1.0
+### 1.1.2
 
 - Added configuration options to support new certificate types.
