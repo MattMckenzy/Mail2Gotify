@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -16,7 +17,12 @@ namespace Mail2Gotify.Services
 
         public FileSystemCaching(IConfiguration configuration)
         {
-            CacheDirectory = new DirectoryInfo(configuration["Services:Mail2Gotify:CacheDirectory"]);
+            string cacheDirectory = configuration["Services:Mail2Gotify:CacheDirectory"];
+
+            if (string.IsNullOrWhiteSpace(cacheDirectory))
+                throw new KeyNotFoundException("Could not find the cache directory configuration at \"Services:Mail2Gotify:CacheDirectory\"");
+
+            CacheDirectory = new DirectoryInfo(cacheDirectory);
         }
 
         public CacheItem Get(string key)

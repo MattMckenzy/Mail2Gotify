@@ -32,14 +32,5 @@ namespace Mail2Gotify.Exceptions
         public ForbiddenException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        /// <summary>
-        /// Default constructor with which to serialize.
-        /// </summary>
-        /// <param name="info">The serialization info to use.</param>
-        /// <param name="context">The streaming context to use.</param>
-        protected ForbiddenException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

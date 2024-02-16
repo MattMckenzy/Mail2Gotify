@@ -29,12 +29,5 @@ namespace Mail2Gotify.Exceptions
         public NotFoundException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        /// <summary>
-        /// Constructor with serialization info and streaming context.
-        /// </summary>
-        protected NotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

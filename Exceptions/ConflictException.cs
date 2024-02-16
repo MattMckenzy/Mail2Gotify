@@ -29,12 +29,5 @@ namespace Mail2Gotify.Exceptions
         public ConflictException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        /// <summary>
-        /// Constructor with serialization info and streaming context.
-        /// </summary>
-        protected ConflictException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

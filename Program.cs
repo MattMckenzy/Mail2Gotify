@@ -1,4 +1,5 @@
 ﻿using Mail2Gotify.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Polly;
@@ -18,6 +19,11 @@ namespace Mail2Gotify
         {
             #pragma warning disable CA1416 // Validate platform compatibility
             await Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(builder => {
+                    builder.SetBasePath(Directory.GetCurrentDirectory());
+                    builder.AddJsonFile($"appsettings.json", optional: false);
+                    builder.AddEnvironmentVariables();
+                })
                 .UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
                 .ConfigureServices((hostContext, services) =>
                 {

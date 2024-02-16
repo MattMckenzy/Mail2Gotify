@@ -31,16 +31,19 @@ Services:Gotify:Header | X-Gotify-Key | Gotify's authentication header to use (t
 Services:Mail2Gotify:HostAddress | | The address on which this service resides.
 Services:Mail2Gotify:HostPort | 587 | The port that this service will use to receive mail through SMTP.
 Services:Mail2Gotify:CacheDirectory | | The directory to use for persistent caaching (bind with docker for permanency).
-Services:Mail2Gotify:CertLocation | | The location for the X502 certificate used for TLS encryption. If left empty, Mail2Gotify will create a self-signed certificate with the variables below.
-Services:Certificate:Name | Mail2Gotify | The name used for the creation of the X502 certificate used for the SMTP server's TLS encryption.
-Services:Certificate:Password |  | The password used for the creation of the X502 certificate.
+Services:Mail2Gotify:CertLocation | | The location for the certificate used for TLS encryption. If left empty, Mail2Gotify will create a self-signed certificate using the "Services:Certificate:Name" and "Services:Certificate:Password" variables shown below.
+Services:Mail2Gotify:KeyLocation | | The location of the PEM key file certificate used for TLS encryption. Only used when CertType is "PEM".
+Services:Mail2Gotify:CertPassword | | The password of the PEM file if it is encrypted. Only used when CertType is "PEM".
+Services:Mail2Gotify:CertType | PEM | The type pf certificate used for TLS encryption. Either "PEM" or "PKCS7".
+Services:SelfSignedCertificate:Name | Mail2Gotify | The name used for the creation of the self-signed certificate used for the SMTP server's TLS encryption.
+Services:SelfSignedCertificate:Password |  | The password used for the creation of the self-signed certificate.
 
 
-# Docker
+## Docker
 
 Here's how I configure my installation :
 
-## docker-compose.yaml
+### docker-compose.yaml
 ```yaml
 version: "3"
 
@@ -56,10 +59,10 @@ services:
     environment:
       - Services:Mail2Gotify:HostAddress=localhost
       - Services:Mail2Gotify:CacheDirectory=/app/cache
-      - Services:Mail2Gotify:CertLocation=/app/certs/privkey.pfx      
+      - Services:Mail2Gotify:CertLocation=/app/certs/privkey.pfx
       - Services:Gotify:ServiceUri=https://gotify.exampledomain.ca
       - TZ=America/Toronto
-    image: mattmckenzy/mail2gotify:latest      
+    image: mattmckenzy/mail2gotify:latest
     volumes:
       - cache:/app/cache
       - /etc/localtime:/etc/localtime:ro
@@ -71,6 +74,15 @@ services:
     network_mode: "host"
 ```
 
-# Donate
+## Release Notes
+
+### 1.0.0
+
+- Initial release
+
+## Donate
 
 If you appreciate my work and feel like helping me realize other projects, you can donate at <a href="https://paypal.me/MattMckenzy">https://paypal.me/MattMckenzy</a>!
+### 1.1.0
+
+- Added configuration options to support new certificate types.

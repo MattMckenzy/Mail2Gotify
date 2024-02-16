@@ -1,19 +1,14 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/runtime AS base
+FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 WORKDIR /app
 EXPOSE 587
 
-FROM mcr.microsoft.com/dotnet/sdk AS build
-WORKDIR /src
-COPY ["Mail2Gotify.csproj", "."]
-RUN dotnet restore "./Mail2Gotify.csproj"
-COPY . .
-WORKDIR "/src/."
-RUN dotnet build "Mail2Gotify.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "Mail2Gotify.csproj" -c Release -o /app/publish
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS publish
+ARG TARGETARCH
+ARG CONFIG
+COPY . ./app
+WORKDIR /app
+RUN dotnet restore "Mail2Gotify.csproj" -a $TARGETARCH
+RUN dotnet publish "Mail2Gotify.csproj" --self-contained -a $TARGETARCH -c $CONFIG -o publish
 
 FROM base AS final
 WORKDIR /app
