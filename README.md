@@ -76,13 +76,6 @@ services:
 
 ## Release Notes
 
-### 1.0.0
-
-- Initial release
-
-## Donate
-
-If you appreciate my work and feel like helping me realize other projects, you can donate at <a href="https://paypal.me/MattMckenzy">https://paypal.me/MattMckenzy</a>!
-### 1.1.0
+## 1.1.0
 
 - Added configuration options to support new certificate types.
