@@ -13,7 +13,7 @@ This application will let you redirect mail to your gotify instance. It can help
 
 Simply fill up the necessary configuration variables, host the service and expose the configured port. 
 
-TLS1.1 or 1.2 is mandatory and Mail2Gotify will need an X502 certificate to function. You can choose to point the "CertLocation" variable to a valid *.pfx certificate, provided by Let's Encrypt for example, or leave it empty to have Mail2Gotify cerate a self-signed one. Keep in mind, however, that self-signed certificates might not be accepted by certain applications, such as pfSense's notifications service. 
+TLS 1.2 or 1.3 is mandatory and Mail2Gotify will need a certificate to function. You can choose to point the "CertLocation" variable to a valid PEM or PKCS7 certificate, or leave it empty to have Mail2Gotify cerate a self-signed one. Keep in mind, however, that self-signed certificates might not be accepted by certain applications, such as pfSense's notifications service. For PEM certificate types, it can also support encrypted or seperate key file certificates if the configuration is properly filled out. 
 
 Create a Gotify Application if necessary and point your email notifier to the host and port, using the Gotify App name as the authentication user and the Gotify App token as the authentication password. You can also append a dash and priority number to the application name, i.e. "pfSense-6", to change the priority level of the Gotify notification. Default priority is 5.
 

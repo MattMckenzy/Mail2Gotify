@@ -38,7 +38,7 @@ gh release create -t "Release v$CHOSEN_VERS" -n "$MESSAGE" v$CHOSEN_VERS
 set +o noglob
 set -o histexpand
 
-docker buildx build --build-arg CONFIG="Release" --platform=linux/amd64,linux/arm64 --push -t "mattmckenzy/mail2gotify:latest" -t "mattmckenzy/mail2gotify:$CHOSEN_VERS" -f "Dockerfile" .
+docker buildx build --build-arg CONFIG="Release" --platform=linux/amd64 --push -t "mattmckenzy/mail2gotify:latest" -t "mattmckenzy/mail2gotify:$CHOSEN_VERS" -f "Dockerfile" .
 docker run -v .:/workspace \
   -e DOCKERHUB_USERNAME='mattmckenzy' \
   -e DOCKERHUB_PASSWORD="$(cat ~/.tokens/dh)" \
