@@ -53,21 +53,19 @@ volumes:
 services:
   mail2gotify:
     container_name: mail2gotify
-    entrypoint:
-      - dotnet
-      - Mail2Gotify.dll
     environment:
       - Services:Mail2Gotify:HostAddress=localhost
-      - Services:Mail2Gotify:CacheDirectory=/app/cache
-      - Services:Mail2Gotify:CertLocation=/app/certs/privkey.pfx
+      - Services:Mail2Gotify:CacheDirectory=/cache
+      - Services:Mail2Gotify:CertLocation=/certs/exampledomain.crt    
+      - Services:Mail2Gotify:KeyLocation=/certs/exampledomain.key     
       - Services:Gotify:ServiceUri=https://gotify.exampledomain.ca
       - TZ=America/Toronto
     image: mattmckenzy/mail2gotify:latest
     volumes:
-      - cache:/app/cache
+      - cache:/cache
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /mnt/docker/storage/volumes/swag_data/_data/etc/letsencrypt/live/exampledomain.ca:/app/certs
+      - /mnt/docker/storage/volumes/nginx_data/_data/keys:/certs
     restart: always
     ports:
       - "587:587"
@@ -76,6 +74,6 @@ services:
 
 ## Release Notes
 
-### 1.1.2
+### 1.1.3
 
 - Added configuration options to support new certificate types.

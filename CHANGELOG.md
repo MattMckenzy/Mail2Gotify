@@ -2,7 +2,7 @@
 
 All notable changes to "Mail2Gotify" will be documented in this file.
 
-## 1.1.2
+## 1.1.3
 
 - Added configuration options to support new certificate types.
 
