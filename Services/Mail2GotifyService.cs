@@ -66,11 +66,12 @@ namespace Mail2Gotify.Services
               .Endpoint(builder =>
                 builder                
                 .Port(_configuration.GetValue<int>("Services:Mail2Gotify:HostPort"))
-                .IsSecure(true)
+                .IsSecure(_configuration.GetValue<bool>("Services:Mail2Gotify:Secure"))
+                .AllowUnsecureAuthentication(true)
                 .AuthenticationRequired()
                 .SupportedSslProtocols(System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls13)
                 .Certificate(x509Certificate))
-              .Build();
+                .Build();
 
             ServiceProvider serviceProvider = new();
             serviceProvider.Add(_gotifyMessageStore);
